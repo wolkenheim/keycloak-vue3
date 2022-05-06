@@ -1,10 +1,11 @@
 # Keycloak Client for Vue 3 with Piñia and TypeScript
 
-This is a detailed step by step guide to set up an existing Vue 3 project with Keycloak. There are multiple ways to 
+This is a detailed step-by-step guide to set up an existing Vue 3 project with Keycloak. There are multiple ways to 
 achieve this. The Keycloak docs give you some hints but let´s be honest: the basic solution with conditions 
-in main.ts is not that great. You end up with a bloated main.ts file with a lot of conditions.
+in main.ts is not that great. You end up with a bloated main.ts file with a lot of conditions, see
+[keycloak vue example](https://www.keycloak.org/securing-apps/vue)
 
-## Motivation: lessons learned in Vue 2
+## Motivation: lessons learned with Keycloak and Vue 2
 I wrote an own npm package for internal Vue 2 projects at work. This worked fine as we had exactly the same setup in 
 our apps. However: you needed to inject the Vuex store to the given plugin. The Keycloak User and their token needed 
 to be stored in Vuex.
@@ -24,7 +25,7 @@ To work with Keycloak you need... well, a running Keycloak instance. It is conve
 which might not be the case in your company when other teams manage the Keycloak instance. I prepared a docker compose
 file with Keycloak and its Postgres DB.
 ```
-cd __INFRA
+cd _INFRA
 docker-compose up
 ```
 
