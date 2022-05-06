@@ -1,0 +1,33 @@
+---
+version: '3.5'
+
+services:
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    volumes:
+      - ./imports:/opt/jboss/keycloak/imports
+    environment:
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: kdeyclo9sc
+      DB_USER: kdeyclo9sc
+      DB_PASSWORD: 8cQcwwwicWco
+      KEYCLOAK_USER: admin1
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:11.1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: kdeyclo9sc
+      POSTGRES_USER: kdeyclo9sc
+      POSTGRES_PASSWORD: 8cQcwwwicWco
+
+volumes:
+  postgres_data:
