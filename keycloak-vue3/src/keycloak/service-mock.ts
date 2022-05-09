@@ -1,6 +1,5 @@
 import type {KeycloakService} from "@/keycloak/types";
-import Keycloak from "keycloak-js";
-import type {UserStoreReturnType} from "@/stores/user";
+import type {UserStoreReturnType} from "@/keycloak/user";
 
 
 export class ServiceMock implements KeycloakService{

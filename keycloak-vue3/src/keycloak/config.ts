@@ -4,9 +4,17 @@ export interface KeycloakJsConfigType {
     clientId: string
 }
 
+export interface ServiceConfigType {
+    refreshTokenMilliseconds: number
+}
+
 export const keycloakJsConfig : KeycloakJsConfigType = {
     url: import.meta.env.VITE_APP_KEYCLOAK_JS_URL ?? "",
     realm: import.meta.env.VITE_APP_KEYCLOAK_JS_REALM ?? "",
     clientId: import.meta.env.VITE_APP_KEYCLOAK_JS_CLIENT_ID ?? "",
+}
+
+export const serviceConfig: ServiceConfigType = {
+    refreshTokenMilliseconds: import.meta.env.VITE_APP_REFRESH_TOKEN_MS ?? 50000,
 }
 

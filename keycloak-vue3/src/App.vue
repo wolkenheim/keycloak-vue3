@@ -1,20 +1,44 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
+import {useUserStore} from "@/keycloak/user";
+import {computed, onMounted} from "vue";
+import {serviceFactory} from "@/keycloak/factory";
+import Products from "@/components/Products.vue";
+
+const userStore = useUserStore();
+
+const isLoggedIn = computed<boolean>(() => {
+  return userStore.isLoggedIn
+})
+
+const keycloakService = serviceFactory(userStore)
+const logout = () => keycloakService.logout()
+
+onMounted(() => {
+  keycloakService.login()
+})
+
 </script>
 
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
+
+
+    <div v-if="isLoggedIn" class="wrapper">
       <HelloWorld msg="You did it!" />
+      <Products></Products>
+
+      <button @click="logout">Click to logout</button>
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+
       </nav>
     </div>
+    <div v-else>You are not logged in</div>
   </header>
 
   <RouterView />
