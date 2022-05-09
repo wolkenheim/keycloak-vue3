@@ -98,6 +98,7 @@ First thing is to login the user. This will happen with `await this.keycloakInst
 is just a boolean success flag. Not very useful. What we do have is the access Token of the user. It can be retrieved
 simply by `this.keycloakInstance.token`
 
+## 5. Http Client
 Now for the axios http client. I created a global instance to demonstrate the idea. It has access to Pinia and get its
 token from there. The token will be used in all outgoing calls that use said axiosInstance from src/axios.ts. Just
 click on the "fetch products" button and inspect the outgoing header. There should be an attached Authentication key
@@ -105,21 +106,21 @@ with the Bearer token retrieved from Keycloak. Your backend need to verify given
 
 You now have an authenticated user. 
 
-## 5. Refresh the token
+## 6. Refresh the token
 One small problem though. The token is valid only for a small period of time, sometimes only one minute. You need to 
 refresh the token. What we learned the hard way: you cannot use `setInterval()` of Javascript. Behavior in chrome: As 
 soon as the Browser tab goes to background mode the function will not work as intended, 
 see [stackoverflow](https://stackoverflow.com/questions/6032429/chrome-timeouts-interval-suspended-in-background-tabs) 
 The phenomenon still exists: background tabs have low priority. You need to use setTimeout and make a recursive call.
 
-## 6. Fetch User Data
+## 7. Fetch User Data
 Next we wanted to get basic information about the logged-in user. To display it, let´s show their name. This can be
 done simply by calling `loadUserProfile()` on the Keycloak client. We set the info to the store. Hence, every component
 can access and display it. To demonstrate it, let´s implement a TopBar component without Props but direct access to 
 the user store. This works, the userName can be displayed here. You can inspect Pinia and the state of User store via
 Vue Dev Tools in Chrome. 
 
-## 7. Adding Roles
+## 8. Authorization: Adding Roles
 Next we need same roles. Keycloak roles are quite a complex topic. On the server, I added Client roles and assigned
 the Test user to a "Designer" Client role. Not realm roles. Those roles can be retrieved via 
 `this.keycloakInstance.resourceAccess['vue-acme']`. 
@@ -127,3 +128,9 @@ the Test user to a "Designer" Client role. Not realm roles. Those roles can be r
 This may or may not be useful for you. It really depends on your setup and there are a plethora of ways to configure
 authorization roles here. You will most likely write custom methods extracting data. Also, it is possible to send 
 additional user data in the encoded JWT token or make it accessible via an own REST endpoint.
+
+## 9. Add Mock Keycloak Service
+For local development it is convenient to disable Keycloak at times. There is an env Variable `VITE_APP_KEYCLOAK_ENABLED=false`
+for that. Based on its value the factory delivers a mock service without any real keycloak requests. This should
+be good for many use cases. If you need multiple users with roles a boolean flag will no longer work. But
+for simple cases this is a great way to work.
