@@ -22,9 +22,9 @@ Let´s get started.
 
 ## Overview of the Keycloak Auth workflow
 This is going to happen
-1) User calls Vue application. They have no auth token. 
+1) User calls Vue application first time. There is no auth token.
 2) Keycloak-js redirects User to the auth page of Keycloak Server. User logs in. Keycloak server start session for user.
-3) Redirect back to Vue application with token.
+3) Server Redirects user back to Vue SPA application. User is logged in and has a valid JWT token.
 
 The auth workflow is handled by keycloak, both js and server. Our job starts with the authenticated user. Their token,
 user info and groups need to be persisted globally in our app via a Pinia User Store. Each component will potentially 
@@ -142,11 +142,21 @@ be good for many use cases. If you need multiple users with roles a boolean flag
 for simple cases this is a great way to work.
 
 ## 10. Unit Testing
-Time to add unit tests. This should have come first. It did not. Better late than never. As components get usually 
+Time to add unit tests. This should have come first. It did not. Well, better late than never. As components get usually 
 tested in isolation, keycloak will be out of our way. In case it needs to be disabled, we can make good use of the
 env variable implemented earlier. Installing Keycloak was quite an endeavour, testing is not. As all the relevant data
 resides in the store, we simply need to pass in mock User Object, a fake string for a token and a role. This is basically
-the same we did already in the mock service. The [testing](https://pinia.vuejs.org/cookbook/testing.html#unit-testing-components) 
+the same we did already in the mock service. 
+
+The [testing](https://pinia.vuejs.org/cookbook/testing.html#unit-testing-components) 
 section in the docs describe what we need: a testing package for Vite. Afterwards the initial state needs to be set
-when mounting the wrapper. This is 
+when mounting the wrapper.
+
+This is a very simple setup when it comes to authentication and authorization. You might want to work with more with
+router props for more sophisticated tasks.
+
+## Conclusion
+This is a working setup to implement Keycloak in Vue. I found surprisingly little information on the topic and that´s
+why I wrote down this guide. You don´t have to fall in all the pits I´ve been already in. And there are quite a few 
+of them. Keycloak is definitely not a hot, new tech you master in a few hours. It takes time. Good luck on your way.
 
