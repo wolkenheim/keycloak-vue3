@@ -98,13 +98,16 @@ First thing is to login the user. This will happen with `await this.keycloakInst
 is just a boolean success flag. Not very useful. What we do have is the access Token of the user. It can be retrieved
 simply by `this.keycloakInstance.token`
 
-## 5. Make token available to Http Client
-Now for the axios http client. I created a global instance to demonstrate the idea. It has access to Pinia and get its
-token from there. The token will be used in all outgoing calls that use said axiosInstance from src/axios.ts. Just
-click on the "fetch products" button and inspect the outgoing header. There should be an attached Authentication key
-with the Bearer token retrieved from Keycloak. Your backend need to verify given token on every call. 
+## 5. Attach Bearer token to Http Client
+Now for the axios http client. I created a global instance to demonstrate the idea. It is not possible to import
+axios from the package anymore. A central instance with the auth token is needed. This instance has access to Pinia and 
+gets its token from there. The token will be used in all outgoing calls that use said axiosInstance from src/axios.ts. 
+Just click on the "fetch products" button and inspect the outgoing header. The call will fail as there is no backend
+running yet. This is okay, we are not interested on the response. 
 
-You now have an authenticated user. 
+Something else is important here: There should be an "Authorization" key in the headers of the outgoing call. It should
+have the Bearer token retrieved from Keycloak. Now the backend application needs to verify that token on every call.
+This is out of scope for this project.
 
 ## 6. Refresh the token
 One small problem though. The token is valid only for a small period of time, sometimes only one minute. You need to 
@@ -112,6 +115,9 @@ refresh the token. What we learned the hard way: you cannot use `setInterval()` 
 soon as the Browser tab goes to background mode the function will not work as intended, 
 see [stackoverflow](https://stackoverflow.com/questions/6032429/chrome-timeouts-interval-suspended-in-background-tabs) 
 The phenomenon still exists: background tabs have low priority. You need to use setTimeout and make a recursive call.
+
+An alternative option is to use web works which are not affected by the background limitations and hence the problems
+with setInterval in browser tabs.
 
 ## 7. Fetch User Data
 Next we wanted to get basic information about the logged-in user. To display it, let´s show their name. This can be
