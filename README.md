@@ -76,4 +76,7 @@ cd keycloak-vue3
 npm run dev
 ```
 This is the plan: the logic for authentication will live in App.vue. This is a base component that will be called no
-matter what route is active. 
+matter what route is active.
+
+What we build is basically a wrapper around the Keycloak client. The task is to get data from keycloak and put it 
+into the store. 
