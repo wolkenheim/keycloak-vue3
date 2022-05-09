@@ -1,14 +1,15 @@
 import {describe, it, expect, vi} from 'vitest'
 
 import {mount} from '@vue/test-utils'
-import TopBar from '../TopBar.vue'
+import App from '../../App.vue'
 import {createTestingPinia} from '@pinia/testing'
 import testUser from "@/keycloak/fixtures/test-user.json"
 
-describe('TopBar', () => {
+describe('App', () => {
     it('renders properly', () => {
-        const wrapper = mount(TopBar, {
+        const wrapper = mount(App, {
             global: {
+                stubs: ["router-link", "router-view"],
                 plugins: [createTestingPinia({
                     initialState: {
                         user: {

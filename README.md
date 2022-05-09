@@ -140,3 +140,13 @@ For local development it is convenient to disable Keycloak at times. There is an
 for that. Based on its value the factory delivers a mock service without any real keycloak requests. This should
 be good for many use cases. If you need multiple users with roles a boolean flag will no longer work. But
 for simple cases this is a great way to work.
+
+## 10. Unit Testing
+Time to add unit tests. This should have come first. It did not. Better late than never. As components get usually 
+tested in isolation, keycloak will be out of our way. In case it needs to be disabled, we can make good use of the
+env variable implemented earlier. Installing Keycloak was quite an endeavour, testing is not. As all the relevant data
+resides in the store, we simply need to pass in mock User Object, a fake string for a token and a role. This is basically
+the same we did already in the mock service. The [testing](https://pinia.vuejs.org/cookbook/testing.html#unit-testing-components) 
+section in the docs describe what we need: a testing package for Vite. Afterwards the initial state needs to be set
+when mounting the wrapper. This is 
+
