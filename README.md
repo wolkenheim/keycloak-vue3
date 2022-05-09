@@ -80,3 +80,35 @@ matter what route is active.
 
 What we build is basically a wrapper around the Keycloak client. The task is to get data from keycloak and put it 
 into the store. 
+
+## 4. Authenticate User
+A couple of things here: First a userStore is needed. Nothing fancy here, just a regular Pinia store to make the 
+current User and their token accessible. Then the Keycloak client needs to get instantiated. I wrote a small 
+factory function for this. The main part is the Keycloak Service which needs both the Keycloak instance and the user
+store. 
+
+During local testing you might want to disable Keycloak altogether at certain phases. A real Keycloak server might not
+be accessible. Also, it is not very convenient to run the docker file all the time. As it consumes quite some resources.
+In most cases Keycloak will not be necessary. What we want here is a solution that can be turned off. We do this with 
+a config flag and swap our service for a mock implementation. Also think of unit tests. 
+
+Therefor we create an interface for the keycloak service with two methods: login and logout.
+First thing is to login the user. This will happen with `await this.keycloakInstance.init()`. In case of success the result
+is just a boolean success flag. Not very useful. What we do have is the access Token of the user. It can be retrieved
+simply by `this.keycloakInstance.token`
+
+Now for the axios http client. I created a global instance to demonstrate the idea. It has access to Pinia and get its
+token from there. The token will be used in all outgoing calls that use said axiosInstance from src/axios.ts. Just
+click on the "fetch products" button and inspect the outgoing header. There should be an attached Authentication key
+with the Bearer token retrieved from Keycloak. Your backend need to verify given token on every call. 
+
+You now have an authenticated user. 
+
+## 5. Refresh the token
+One small problem though. The token is valid only for a small period of time, sometimes only one minute. You need to 
+refresh the token. What we learned the hard way: you cannot use `setInterval()` of Javascript. Behavior in chrome: As 
+soon as the Browser tab goes to background mode the function will not work as intended, 
+see [stackoverflow](https://stackoverflow.com/questions/6032429/chrome-timeouts-interval-suspended-in-background-tabs) 
+The phenomenon still exists: background tabs have low priority. You need to use setTimeout and make a recursive call.
+
+
