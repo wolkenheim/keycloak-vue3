@@ -24,17 +24,8 @@ export const useUserStore = defineStore({
         },
     },
     actions: {
-        setUser(user: KeycloakProfile): void {
-            this.user = user
-        },
-        deleteUser(): void {
-            this.user = null
-        },
-        setAccessToken(token: string): void {
-            this.accessToken = token
-        },
         addRole(role: string) : void {
             this.roles.push(role)
-        }
+        },
     }
 })

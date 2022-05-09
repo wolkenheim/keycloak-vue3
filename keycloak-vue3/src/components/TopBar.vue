@@ -1,22 +1,13 @@
 <script setup lang="ts">
 import {useUserStore} from "@/keycloak/user";
-import {computed} from "vue";
-
 const userStore = useUserStore();
-
-const userName = computed<string>(() => {
-  return userStore?.user?.username ?? ""
-})
-const userRoles = computed<string>(() => {
-  return userStore?.roles.toString()
-})
 </script>
 
 <template>
   <div id="topbar">
     <div>
-      <span>Welcome back, {{ userName }}. </span>
-      <span>Your roles are: {{ userRoles }} </span>
+      <span>Welcome back, {{ userStore?.user?.username }}. </span>
+      <span>Your roles are: {{ userStore?.roles.toString() }} </span>
     </div>
   </div>
 </template>

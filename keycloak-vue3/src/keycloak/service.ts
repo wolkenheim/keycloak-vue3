@@ -13,20 +13,21 @@ export class Service implements KeycloakService {
     }
 
     async login(): Promise<void> {
+        this.userStore.errorMsg = ""
         try {
             const auth = await this.keycloakInstance.init({onLoad: 'login-required', checkLoginIframe: false})
             if (auth) {
-                this.userStore.setAccessToken(this.keycloakInstance.token as string)
+                this.userStore.accessToken = this.keycloakInstance.token as string
                 await this.refreshToken()
                 await this.fetchUserProfile()
 
                 const roleKey = this.keycloakInstance.clientId ?? ""
                 this.extractClientRoles(roleKey)
             } else {
-                console.log("Unknown auth error occurred")
+                this.userStore.errorMsg = "Auth failed. Unknown error occurred"
             }
-        } catch (error) {
-            console.log(error)
+        } catch (error: unknown) {
+            this.userStore.errorMsg = error as string
         }
     }
 
@@ -36,10 +37,9 @@ export class Service implements KeycloakService {
 
     async fetchUserProfile(): Promise<void> {
         try {
-            const userProfile = await this.keycloakInstance.loadUserProfile();
-            this.userStore.setUser(userProfile)
-        } catch (error) {
-            console.log(error)
+            this.userStore.user = await this.keycloakInstance.loadUserProfile();
+        } catch (error : unknown) {
+            this.userStore.errorMsg = error as string
         }
     }
 
@@ -55,7 +55,7 @@ export class Service implements KeycloakService {
         const refreshed = await this.keycloakInstance.updateToken(5)
 
         if (refreshed) {
-            this.userStore.setAccessToken(this.keycloakInstance.token as string)
+            this.userStore.accessToken = this.keycloakInstance.token as string
         }
 
         setTimeout(async () => {

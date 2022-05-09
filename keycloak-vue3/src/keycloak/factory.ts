@@ -10,8 +10,9 @@ export function createKeycloakInstance(): Keycloak {
 }
 
 export function serviceFactory(userStore: UserStoreReturnType): KeycloakService {
+    const enableKeycloak = import.meta.env.VITE_APP_KEYCLOAK_ENABLED as boolean ?? false
 
-    if (!import.meta.env.VITE_APP_KEYCLOAK_ENABLED) {
+    if (enableKeycloak) {
         return new ServiceMock(userStore)
     }
     return new Service(createKeycloakInstance(), userStore, serviceConfig)

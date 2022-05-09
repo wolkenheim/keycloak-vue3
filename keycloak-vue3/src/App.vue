@@ -23,6 +23,7 @@ onMounted(() => {
 
 <template>
   <header>
+
     <div v-if="isLoggedIn" class="wrapper">
       <TopBar></TopBar>
       <Products></Products>
@@ -31,7 +32,7 @@ onMounted(() => {
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-
+        <RouterLink to="/about">about</RouterLink>
       </nav>
     </div>
     <div v-else>You are not logged in</div>
