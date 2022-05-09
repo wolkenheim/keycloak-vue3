@@ -98,7 +98,7 @@ First thing is to login the user. This will happen with `await this.keycloakInst
 is just a boolean success flag. Not very useful. What we do have is the access Token of the user. It can be retrieved
 simply by `this.keycloakInstance.token`
 
-## 5. Http Client
+## 5. Make token available to Http Client
 Now for the axios http client. I created a global instance to demonstrate the idea. It has access to Pinia and get its
 token from there. The token will be used in all outgoing calls that use said axiosInstance from src/axios.ts. Just
 click on the "fetch products" button and inspect the outgoing header. There should be an attached Authentication key

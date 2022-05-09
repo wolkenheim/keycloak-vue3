@@ -100,10 +100,24 @@
       "attributes" : { }
     } ],
     "client" : {
-      "vue-acme" : [ ],
+      "vue-acme" : [ {
+        "id" : "81ac69ca-6ec3-44c4-a8d7-dad6d088ed6f",
+        "name" : "Project Manager",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "33d9cdbc-1297-45ad-a8a2-be971468c9c5",
+        "attributes" : { }
+      }, {
+        "id" : "5fb7a470-8781-4046-a474-f6e5eeff5da1",
+        "name" : "Designer",
+        "description" : "Can upload images",
+        "composite" : false,
+        "clientRole" : true,
+        "containerId" : "33d9cdbc-1297-45ad-a8a2-be971468c9c5",
+        "attributes" : { }
+      } ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
-      "vue-3" : [ ],
       "account-console" : [ ],
       "broker" : [ {
         "id" : "20da4ff3-f88d-45b3-b0ff-154644ece387",
@@ -414,6 +428,9 @@
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-master" ],
+    "clientRoles" : {
+      "vue-acme" : [ "Project Manager", "Designer" ]
+    },
     "notBefore" : 0,
     "groups" : [ ]
   } ],
@@ -616,36 +633,6 @@
     "defaultClientScopes" : [ "web-origins", "profile", "roles", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
-    "id" : "6ff831de-7dfe-4614-bc11-4efa48c41af4",
-    "clientId" : "vue-3",
-    "rootUrl" : "http://localhost:3000",
-    "adminUrl" : "http://localhost:3000",
-    "surrogateAuthRequired" : false,
-    "enabled" : true,
-    "alwaysDisplayInConsole" : false,
-    "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "http://localhost:3000/*" ],
-    "webOrigins" : [ "http://localhost:3000" ],
-    "notBefore" : 0,
-    "bearerOnly" : false,
-    "consentRequired" : false,
-    "standardFlowEnabled" : true,
-    "implicitFlowEnabled" : false,
-    "directAccessGrantsEnabled" : true,
-    "serviceAccountsEnabled" : false,
-    "publicClient" : true,
-    "frontchannelLogout" : false,
-    "protocol" : "openid-connect",
-    "attributes" : {
-      "backchannel.logout.session.required" : "true",
-      "backchannel.logout.revoke.offline.tokens" : "false"
-    },
-    "authenticationFlowBindingOverrides" : { },
-    "fullScopeAllowed" : true,
-    "nodeReRegistrationTimeout" : -1,
-    "defaultClientScopes" : [ "web-origins", "profile", "roles", "email" ],
-    "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
-  }, {
     "id" : "33d9cdbc-1297-45ad-a8a2-be971468c9c5",
     "clientId" : "vue-acme",
     "name" : "vue-acme",
@@ -670,6 +657,7 @@
     "attributes" : {
       "id.token.as.detached.signature" : "false",
       "saml.assertion.signature" : "false",
+      "access.token.lifespan" : "60",
       "saml.force.post.binding" : "false",
       "saml.multivalued.roles" : "false",
       "saml.encrypt" : "false",
