@@ -18,7 +18,10 @@ export class Service implements KeycloakService {
             if (auth) {
                 this.userStore.setAccessToken(this.keycloakInstance.token as string)
                 await this.refreshToken()
-                await this.fetchUser()
+                await this.fetchUserProfile()
+
+                const roleKey = this.keycloakInstance.clientId ?? ""
+                this.extractClientRoles(roleKey)
             } else {
                 console.log("Unknown auth error occurred")
             }
@@ -31,12 +34,20 @@ export class Service implements KeycloakService {
         this.keycloakInstance.logout()
     }
 
-    async fetchUser(): Promise<void> {
+    async fetchUserProfile(): Promise<void> {
         try {
             const userProfile = await this.keycloakInstance.loadUserProfile();
             this.userStore.setUser(userProfile)
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    extractClientRoles(roleKey: string): void {
+        if (this.keycloakInstance.resourceAccess && Object.prototype.hasOwnProperty.call(this.keycloakInstance.resourceAccess, roleKey)) {
+            this.keycloakInstance.resourceAccess[roleKey].roles.forEach(group => {
+                this.userStore.addRole(group)
+            })
         }
     }
 

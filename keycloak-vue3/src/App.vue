@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
 import {useUserStore} from "@/keycloak/user";
 import {computed, onMounted} from "vue";
 import {serviceFactory} from "@/keycloak/factory";
 import Products from "@/components/Products.vue";
+import TopBar from "@/components/TopBar.vue";
 
 const userStore = useUserStore();
 
@@ -23,12 +23,8 @@ onMounted(() => {
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-
-
     <div v-if="isLoggedIn" class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <TopBar></TopBar>
       <Products></Products>
 
       <button @click="logout">Click to logout</button>

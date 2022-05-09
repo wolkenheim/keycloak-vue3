@@ -57,8 +57,9 @@ for the database mounted to the Postgres container. But what about your working 
 clients and users can be quite a drudgery. You really want to do this work only once. And then persist these changes
 in your CVS so every developer gets the same realm. As soon as your app relies on ACL and roles this will become crucial.
 
-The way to do this is exporting the realm to a file. This can be 
-done with this standalone command when your Keycloak instance is running
+The way to do this is exporting the realm to a file. What will not work is to use the "export" button in the admin panel.
+Not all necessary data is getting exported. The full export can be done with the following standalone command when your 
+Keycloak instance is running
 ```
 docker exec -it keycloak-vue3_keycloak_1 /opt/jboss/keycloak/bin/standalone.sh -Djboss.socket.binding.port-offset=100 -Dkeycloak.migration.action=export -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.realmName=master -Dkeycloak.migration.usersExportStrategy=REALM_FILE -Dkeycloak.migration.file=/opt/jboss/keycloak/imports/realm-export.json
 ```
@@ -111,4 +112,18 @@ soon as the Browser tab goes to background mode the function will not work as in
 see [stackoverflow](https://stackoverflow.com/questions/6032429/chrome-timeouts-interval-suspended-in-background-tabs) 
 The phenomenon still exists: background tabs have low priority. You need to use setTimeout and make a recursive call.
 
+## 6. Fetch User Data
+Next we wanted to get basic information about the logged-in user. To display it, let´s show their name. This can be
+done simply by calling `loadUserProfile()` on the Keycloak client. We set the info to the store. Hence, every component
+can access and display it. To demonstrate it, let´s implement a TopBar component without Props but direct access to 
+the user store. This works, the userName can be displayed here. You can inspect Pinia and the state of User store via
+Vue Dev Tools in Chrome. 
 
+## 7. Adding Roles
+Next we need same roles. Keycloak roles are quite a complex topic. On the server, I added Client roles and assigned
+the Test user to a "Designer" Client role. Not realm roles. Those roles can be retrieved via 
+`this.keycloakInstance.resourceAccess['vue-acme']`. 
+
+This may or may not be useful for you. It really depends on your setup and there are a plethora of ways to configure
+authorization roles here. You will most likely write custom methods extracting data. Also, it is possible to send 
+additional user data in the encoded JWT token or make it accessible via an own REST endpoint.

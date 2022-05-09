@@ -6,7 +6,8 @@ export type UserStoreReturnType = ReturnType<typeof useUserStore>
 export type UserStore = {
     user: KeycloakProfile | null,
     accessToken: string | null,
-    groups: string[]
+    roles: string[],
+    errorMsg: string
 }
 
 export const useUserStore = defineStore({
@@ -14,7 +15,8 @@ export const useUserStore = defineStore({
     state: () : UserStore => ({
         user: null,
         accessToken: "",
-        groups: []
+        roles: [],
+        errorMsg: ""
     }),
     getters: {
         isLoggedIn(): boolean {
@@ -31,8 +33,8 @@ export const useUserStore = defineStore({
         setAccessToken(token: string): void {
             this.accessToken = token
         },
-        addGroup(group: string) : void {
-            this.groups.push(group)
+        addRole(role: string) : void {
+            this.roles.push(role)
         }
     }
 })
