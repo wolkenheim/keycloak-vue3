@@ -1,4 +1,4 @@
-# Keycloak Client for Vue 3 with Piñia and TypeScript
+# Keycloak Client for Vue 3 with Pinia and TypeScript
 
 This is a detailed step-by-step guide to set up an existing Vue 3 project with Keycloak. There are multiple ways to 
 achieve this. The Keycloak docs give you some hints but let´s be honest: the basic solution with conditions 
@@ -20,8 +20,21 @@ logic to App.vue. This component with the base layout will be called on every ro
 
 Let´s get started.
 
+## Overview of the Keycloak Auth workflow
+This is going to happen
+1) User calls Vue application. They have no auth token. 
+2) Keycloak-js redirects User to the auth page of Keycloak Server. User logs in. Keycloak server start session for user.
+3) Redirect back to Vue application with token.
+
+The auth workflow is handled by keycloak, both js and server. Our job starts with the authenticated user. Their token,
+user info and groups need to be persisted globally in our app via a Pinia User Store. Each component will potentially 
+need access to the user. Think of roles and ACL. The token is a special case. This will be need only by the http client
+to make secure calls to the backend.
+
 ## 1. Setting up Keycloak
-To work with Keycloak you need... well, a running Keycloak instance. It is convenient to have full access to a realm
+Note: I will check in a fully configured Keycloak server in this project. This guide is optional.
+
+To work with Keycloak you need a running Keycloak server instance. It is convenient to have full access to a realm
 which might not be the case in your company when other teams manage the Keycloak instance. I prepared a docker compose
 file with Keycloak and its Postgres DB.
 ```
@@ -29,8 +42,8 @@ cd _INFRA
 docker-compose up
 ```
 
-This should take a while. It starts up the Keycloak instance at http://localhost:8081. Please see the docker-compose
-file for admin passwords. You can log in with those credentials to configure a realm. This will start a session on the
+Starting up should take a while. Docker start the Keycloak instance at http://localhost:8081 Please consult the 
+docker-compose file for admin passwords. You can log in with those credentials to configure a realm. This will start a session on the
 Keycloak server.
 
 Keycloak is a universe in itself. You can configure now a client from scratch here. Specify the root url 
