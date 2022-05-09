@@ -66,3 +66,14 @@ Once you do this even after deleting the Docker container your changes will be b
 
 Note: this is still based on the image from Docker Hub. The Keycloak Docker repository moved meanwhile to 
 [quay.io](https://quay.io/repository/keycloak/keycloak)
+
+## 2. Install Vue 3
+I added a fresh Vue 3 installation with TypeScript, Pinia and Vue Router. I also installed keycloak-js. Quick note here:
+versions of keycloak server and keycloak-js don´t have to match exactly. In this case server runs on version 16.1.1 and 
+keycloak-js on 18.0.0
+```
+cd keycloak-vue3
+npm run dev
+```
+This is the plan: the logic for authentication will live in App.vue. This is a base component that will be called no
+matter what route is active. 

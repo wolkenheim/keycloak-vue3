@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "keycloak-js": "^18.0.0",
     "pinia": "^2.0.13",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14"
