@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import {useUserStore} from "@/keycloak/user";
-import {computed, onMounted} from "vue";
+import {onMounted} from "vue";
 import {serviceFactory} from "@/keycloak/factory";
 import Products from "@/components/Products.vue";
 import TopBar from "@/components/TopBar.vue";
+import {enableKeycloak} from "@/keycloak/config";
 
 const userStore = useUserStore();
-
-const isLoggedIn = computed<boolean>(() => {
-  return userStore.isLoggedIn
-})
-
-const keycloakService = serviceFactory(userStore)
+const keycloakService = serviceFactory(enableKeycloak, userStore)
 const logout = () => keycloakService.logout()
 
 onMounted(() => {
@@ -24,7 +20,7 @@ onMounted(() => {
 <template>
   <header>
 
-    <div v-if="isLoggedIn" class="wrapper">
+    <div v-if="userStore.isLoggedIn" class="wrapper">
       <TopBar></TopBar>
       <Products></Products>
 
