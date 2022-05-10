@@ -5,10 +5,10 @@ import {onMounted} from "vue";
 import {serviceFactory} from "@/keycloak/factory";
 import Products from "@/components/Products.vue";
 import TopBar from "@/components/TopBar.vue";
-import {enableKeycloak} from "@/keycloak/config";
+import {getEnableKeycloak} from "@/keycloak/config";
 
 const userStore = useUserStore();
-const keycloakService = serviceFactory(enableKeycloak, userStore)
+const keycloakService = serviceFactory(getEnableKeycloak(), userStore)
 const logout = () => keycloakService.logout()
 
 onMounted(() => {
