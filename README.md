@@ -31,8 +31,9 @@ user info and groups need to be persisted globally in our app via a Pinia User S
 need access to the user. Think of roles and ACL. The token is a special case. This will be need only by the http client
 to make secure calls to the backend.
 
-## 1. Setting up Keycloak
-Note: I will check in a fully configured Keycloak server in this project. This guide is optional.
+## 1. Setting up Keycloak server
+I will check in a fully configured Keycloak server in this project. This section is optional. Also keep in mind that
+this server setup is intended for local usage and should by no means get anywhere near a deployment.
 
 To work with Keycloak you need a running Keycloak server instance. It is convenient to have full access to a realm
 which might not be the case in your company when other teams manage the Keycloak instance. I prepared a docker compose
@@ -50,7 +51,7 @@ Keycloak is a universe in itself. You can configure now a client from scratch he
 `http://localhost:3000` which is the vite dev server. This should automatically fill out all forms. 
 You want Client Protocol openid-connect and Client Protocol public.
 
-Next configure a test user and set a password for yourself.
+Next configure a test user and set a password: test@test.com and password: test
 
 As soon as you run `docker-compose down` all the data from keycloak will be lost. Not ideal. You could use a volume
 for the database mounted to the Postgres container. But what about your working colleagues? Configuring realms,
@@ -67,6 +68,11 @@ Once you do this even after deleting the Docker container your changes will be b
 
 Note: this is still based on the image from Docker Hub. The Keycloak Docker repository moved meanwhile to 
 [quay.io](https://quay.io/repository/keycloak/keycloak)
+
+There is a reason for that. Keycloak 16 was the last version based on WildFly. Starting from 17 Keycloak switched
+to quarkus. Read the [docs](https://www.keycloak.org/migration/migrating-to-quarkus). The whole server configuration
+changed. I kept the old image as goal of this guide was to get a keycloak server for testing purposed up and running
+and not to configure Keycloak from scratch.
 
 ## 2. Install Vue 3
 I added a fresh Vue 3 installation with TypeScript, Pinia and Vue Router. I also installed keycloak-js. Quick note here:
@@ -142,11 +148,19 @@ be good for many use cases. If you need multiple users with roles a boolean flag
 for simple cases this is a great way to work.
 
 ## 10. Unit Testing
-Time to add unit tests. This should have come first. It did not. Well, better late than never. As components get usually 
-tested in isolation, keycloak will be out of our way. In case it needs to be disabled, we can make good use of the
-env variable implemented earlier. Installing Keycloak was quite an endeavour, testing is not. As all the relevant data
-resides in the store, we simply need to pass in mock User Object, a fake string for a token and a role. This is basically
-the same we did already in the mock service. 
+Time to add unit tests. This should have come first. It did not. Well, better late than never. I did not write any tests
+for the keycloak wrapper itself. Why is that? It basically does not much except gluing two libraries together, that is
+keycloak-js and pinia. Both are out of scope for testing, you do not write tests for external packages. There is not
+much logic involved except: receiving variables from A and passing them to B. To test this you would need to mock 
+both libraries. So that means: a mock from keycloak-js passes data to a mock from pinia. Is this a good test case?
+I don´t think so.
+
+It´s different for the components in the App. As components get usually tested in isolation, keycloak will be out
+of our way. In case it needs to be disabled, we can make good use of the env variable implemented earlier. 
+
+Installing Keycloak was quite an endeavour, testing is not. Because we do not need to test any keycloak related logic. 
+As all the relevant data resides in the store, we simply need to pass in mock User Object, a fake string for a token 
+and a role. This is basically the same we did already in the mock service. 
 
 The [testing](https://pinia.vuejs.org/cookbook/testing.html#unit-testing-components) 
 section in the docs describe what we need: a testing package for Vite. Afterwards the initial state needs to be set
