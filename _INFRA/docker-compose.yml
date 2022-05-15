@@ -7,7 +7,7 @@ services:
     volumes:
       - ./config:/tmp/keycloak/config
     environment:
-      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN: admin1
       KEYCLOAK_ADMIN_PASSWORD: admin
       KEYCLOAK_IMPORT: /tmp/keycloak/config/realm-export.json
     entrypoint: /tmp/keycloak/config/startup.sh start-dev
