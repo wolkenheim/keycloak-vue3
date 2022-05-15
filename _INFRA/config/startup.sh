@@ -1,4 +1,5 @@
 #!/bin/bash
+# https://github.com/keycloak/keycloak/discussions/10229
 
 IMPORT_FLAG_FILE=/opt/keycloak/imported.flag
 
