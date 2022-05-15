@@ -32,47 +32,38 @@ need access to the user. Think of roles and ACL. The token is a special case. Th
 to make secure calls to the backend.
 
 ## 1. Setting up Keycloak server
-I will check in a fully configured Keycloak server in this project. This section is optional. Also keep in mind that
-this server setup is intended for local usage and should by no means get anywhere near a deployment.
+I included a fully configured realm with test users within the docker compose file. Hence, this section is optional. 
+Keep in mind that this setup is intended for local development and should by no means get anywhere near a deployment. 
 
-To work with Keycloak you need a running Keycloak server instance. It is convenient to have full access to a realm
-which might not be the case in your company when other teams manage the Keycloak instance. I prepared a docker compose
-file with Keycloak and its Postgres DB.
+To work with Keycloak you need a running Keycloak server instance. I included the latest version 18.0.
+It is convenient to have full access to a realm which might not be the case in your company when other teams manage the 
+Keycloak instance. I prepared a docker compose file with Keycloak and its Postgres DB.
 ```
 cd _INFRA
 docker-compose up
 ```
 
 Starting up should take a while. Docker start the Keycloak instance at http://localhost:8081 Please consult the 
-docker-compose file for admin passwords. You can log in with those credentials to configure a realm. This will start a session on the
-Keycloak server.
+docker-compose file for admin passwords. You can log in with those credentials to configure a realm. This will start a 
+session on the Keycloak server.
 
-Keycloak is a universe in itself. You can configure now a client from scratch here. Specify the root url 
-`http://localhost:3000` which is the vite dev server. This should automatically fill out all forms. 
-You want Client Protocol openid-connect and Client Protocol public.
+You can configure now a client from scratch in the admin panel. Specify the root url 
+`http://localhost:3000` which is the url of the vite dev server. This should automatically fill out all fields. 
+Options that should definitely get selected are Client Protocol "openid-connect" and Access Type "public".
 
-Next configure a test user and set a password: test@test.com and password: test
+Next configure a simple test user and set a password: test@test.com and password: test
 
 As soon as you run `docker-compose down` all the data from keycloak will be lost. Not ideal. You could use a volume
 for the database mounted to the Postgres container. But what about your working colleagues? Configuring realms,
 clients and users can be quite a drudgery. You really want to do this work only once. And then persist these changes
 in your CVS so every developer gets the same realm. As soon as your app relies on ACL and roles this will become crucial.
 
-The way to do this is exporting the realm to a file. What will not work is to use the "export" button in the admin panel.
-Not all necessary data is getting exported. The full export can be done with the following standalone command when your 
-Keycloak instance is running
-```
-docker exec -it keycloak-vue3_keycloak_1 /opt/jboss/keycloak/bin/standalone.sh -Djboss.socket.binding.port-offset=100 -Dkeycloak.migration.action=export -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.realmName=master -Dkeycloak.migration.usersExportStrategy=REALM_FILE -Dkeycloak.migration.file=/opt/jboss/keycloak/imports/realm-export.json
-```
-Once you do this even after deleting the Docker container your changes will be back next time you start up the server.
+A quick note of Keycloak server: Keycloak 16 was the last version based on WildFly. Starting from 17 Keycloak switched
+to Quarkus. Read the [docs](https://www.keycloak.org/migration/migrating-to-quarkus). Also, the docker repository changed 
+and is [quay.io](https://quay.io/repository/keycloak/keycloak). No more docker hub.
 
-Note: this is still based on the image from Docker Hub. The Keycloak Docker repository moved meanwhile to 
-[quay.io](https://quay.io/repository/keycloak/keycloak)
-
-There is a reason for that. Keycloak 16 was the last version based on WildFly. Starting from 17 Keycloak switched
-to quarkus. Read the [docs](https://www.keycloak.org/migration/migrating-to-quarkus). The whole server configuration
-changed. I kept the old image as goal of this guide was to get a keycloak server for testing purposed up and running
-and not to configure Keycloak from scratch.
+I first started this guide based on Keycloak 16. There is a [branch](https://github.com/wolkenheim/keycloak-vue3/tree/keycloak-16) 
+with that server version. For frontend development nothing should have changed.
 
 ## 2. Install Vue 3
 I added a fresh Vue 3 installation with TypeScript, Pinia and Vue Router. I also installed keycloak-js. Quick note here:
